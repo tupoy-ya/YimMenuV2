@@ -36,8 +36,9 @@ if(CROSSCOMPILE)
         set(CMAKE_C_COMPILER clang)
         set(CMAKE_CXX_COMPILER clang++)
 
-        add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fuse-ld=lld;-femulated-tls${CXX_FLAGS}>")
-        add_link_options(-fuse-ld=lld -femulated-tls)
+        # Disable RTTI to work around libstdc++ issue https://stackoverflow.com/a/77025827
+        add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fuse-ld=lld;-femulated-tls;-fno-rtti${CXX_FLAGS}>")
+        add_link_options(-fuse-ld=lld -femulated-tls -fno-rtti)
     endif()
 
 endif() 
