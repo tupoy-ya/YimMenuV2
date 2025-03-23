@@ -11,6 +11,9 @@ namespace YimMenu
 {
 	DWORD Main(void*)
 	{
+		while (!FindWindow("grcWindow", nullptr))
+			std::this_thread::sleep_for(100ms);
+
 		const auto documents = std::filesystem::path(std::getenv("USERPROFILE")) / "Documents";
 		FileMgr::Init(documents / "HellBase");
 
