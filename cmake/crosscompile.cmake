@@ -26,7 +26,8 @@ if(CROSSCOMPILE)
     add_compile_definitions(CROSSCOMPILING)
 
     if(USE_GCC)
-        add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fpermissive;${CXX_FLAGS}>")
+        # Disable RTTI to work around libstdc++ issue https://stackoverflow.com/a/77025827
+        add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-fpermissive;-fno-rtti${CXX_FLAGS}>")
         set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
         set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++)
     endif()
