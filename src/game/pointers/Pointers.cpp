@@ -276,6 +276,11 @@ namespace YimMenu
 			ObjectPool = ptr.Add(5).Add(3).Rip().As<PoolEncryption*>();
 		});
 
+		constexpr auto HttpStartRequestPtrn = Pattern<"56 57 48 83 EC 28 48 89 CE 8B 81 ? ? ? ? FF C8 83 F8 04 0F 87">("HttpStartRequest");
+		scanner.Add(HttpStartRequestPtrn, [this](PointerCalculator ptr) {
+			HttpStartRequest = ptr.As<PVOID>();
+		});
+
 		if (!scanner.Scan())
 		{
 			LOG(FATAL) << "Some patterns could not be found, unloading.";

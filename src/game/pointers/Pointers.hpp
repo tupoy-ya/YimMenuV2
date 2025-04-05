@@ -113,6 +113,7 @@ namespace YimMenu
 		PoolEncryption* PedPool;
 		PoolEncryption* ObjectPool;
 		rage::fwVehiclePool*** VehiclePool;
+		PVOID HttpStartRequest;
 	};
 
 	struct Pointers : PointerData
