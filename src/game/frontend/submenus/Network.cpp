@@ -4,7 +4,7 @@
 #include "game/frontend/items/Items.hpp"
 #include "game/frontend/submenus/Network/SavedPlayers.hpp"
 #include "game/gta/Network.hpp"
-#include "game/frontend/submenus/Network/RandomEvents.hpp"
+#include "game/frontend/submenus/network/RandomEvents.hpp"
 
 namespace YimMenu::Submenus
 {
@@ -79,6 +79,7 @@ namespace YimMenu::Submenus
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("despawnbypass"_J)); // move this somewhere else?
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("bypasscasinogeoblock"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("forcescripthost"_J));
+		enhancements->AddItem(std::make_shared<BoolCommandItem>("pausegame"_J));
 	
 		session->AddItem(joinGroup);
 		session->AddItem(bountyGroup);
