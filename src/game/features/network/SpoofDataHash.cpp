@@ -1,5 +1,7 @@
 #include "core/commands/BoolCommand.hpp"
 #include "core/hooking/DetourHook.hpp"
+#include "game/backend/NativeHooks.hpp"
+#include "game/gta/Natives.hpp"
 #include "game/hooks/Hooks.hpp"
 #include "game/pointers/Pointers.hpp"
 #include "types/game_files/CGameDataHash.hpp"
@@ -13,7 +15,11 @@ namespace YimMenu::Features
 		virtual void OnCall() override
 		{
 			auto log = LOG(VERBOSE);
-			log << "DLC Hash: " << BaseHook::Get<Hooks::Network::GetDLCHash, DetourHook<decltype(&Hooks::Network::GetDLCHash)>>()->Original()(*Pointers.DLCManager, 0) << "\n";
+			log << "DLC Hash: "
+			    << BaseHook::Get<Hooks::Network::GetDLCHash, DetourHook<decltype(&Hooks::Network::GetDLCHash)>>()->Original()(
+			           *Pointers.DLCManager,
+			           0)
+			    << "\n";
 			if (auto hashes = Pointers.GameDataHash)
 			{
 				log << "validHashes = {" << "\n";
@@ -25,6 +31,7 @@ namespace YimMenu::Features
 	};
 	static DumpDataHash _DumpDataHash{"dumpdatahash", "Dump Data Hash", "Dumps the current data hash into the console"};
 
+	static void PackOrderHook(rage::scrNativeCallContext* ctx);
 	class SpoofDataHash : public BoolCommand
 	{
 		using BoolCommand::BoolCommand;
@@ -33,23 +40,25 @@ namespace YimMenu::Features
 
 		virtual void OnEnable() override
 		{
+			NativeHooks::AddHook(NativeHooks::ALL_SCRIPTS, NativeIndex::GET_EVER_HAD_BAD_PACK_ORDER, &PackOrderHook);
+
 			constexpr std::array<std::uint32_t, 16> validHashes = {
-				2205510306,
-				988,
-				3512952254,
-				472,
-				0,
-				0,
-				2930305905,
-				0,
-				0,
-				1731098795,
-				234493012,
-				18616,
-				1540917665,
-				0,
-				2624276963,
-				200299391,
+			    2205510306,
+			    988,
+			    3512952254,
+			    472,
+			    0,
+			    0,
+			    2930305905,
+			    0,
+			    0,
+			    1731098795,
+			    234493012,
+			    18616,
+			    1540917665,
+			    0,
+			    2624276963,
+			    200299391,
 			};
 			if (auto hashes = Pointers.GameDataHash)
 			{
@@ -72,6 +81,11 @@ namespace YimMenu::Features
 	};
 
 	static SpoofDataHash _SpoofDataHash{"spoofdatahash", "Spoof Data Hash", "Allows you to join players with rpf mods (or a half installed game)."};
+
+	static void PackOrderHook(rage::scrNativeCallContext* ctx)
+	{
+		return ctx->SetReturnValue(FALSE);
+	}
 }
 
 namespace YimMenu::Hooks
