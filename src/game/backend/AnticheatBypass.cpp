@@ -32,9 +32,15 @@ namespace YimMenu
 		return NativeInvoker::GetNativeHandler(NativeIndex::NET_GAMESERVER_BEGIN_SERVICE)(ctx);
 	}
 
+	static void PackOrderHook(rage::scrNativeCallContext* ctx)
+	{
+		return ctx->SetReturnValue(FALSE);
+	}
+
 	void AnticheatBypass::RunScriptImpl()
 	{
 		NativeHooks::AddHook("shop_controller"_J, NativeIndex::NET_GAMESERVER_BEGIN_SERVICE, &TransactionHook);
+		NativeHooks::AddHook(NativeHooks::ALL_SCRIPTS, NativeIndex::GET_EVER_HAD_BAD_PACK_ORDER, &PackOrderHook);
 
 		m_IsFSLLoaded = CheckForFSL();
 		m_BattlEyeRunning = (NETWORK::_NETWORK_GET_GAME_RESTART_REASON() == 0 && GetModuleHandleA("BEClient_x64.dll")) && !m_IsFSLLoaded;

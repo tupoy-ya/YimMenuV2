@@ -39,6 +39,7 @@ namespace YimMenu
 		BaseHook::Add<Hooks::Features::OpenPauseMenu>(new DetourHook("OpenPauseMenu", Pointers.OpenPauseMenu, Hooks::Features::OpenPauseMenu));
 
 		BaseHook::Add<Hooks::Network::GetPoolType>(new DetourHook("GetPoolType", Pointers.GetPoolType, Hooks::Network::GetPoolType));
+		BaseHook::Add<Hooks::Network::GetDLCHash>(new DetourHook("GetDLCHash", Pointers.GetDLCHash, Hooks::Network::GetDLCHash));
 	}
 
 	Hooking::~Hooking()

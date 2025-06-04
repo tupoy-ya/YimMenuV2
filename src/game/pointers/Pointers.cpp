@@ -4,6 +4,7 @@
 #include "core/memory/ModuleMgr.hpp"
 #include "core/memory/PatternScanner.hpp"
 #include "core/util/Joaat.hpp"
+#include "types/network/rlSessionInfo.hpp"
 #include "types/rage/atArray.hpp"
 
 namespace YimMenu
@@ -367,6 +368,22 @@ namespace YimMenu
 		constexpr auto handleJoinRequestIgnorePoolPatchPtrn = Pattern<"41 83 FF 05 ? 30 43">("HandleJoinRequestIgnorePoolPatch");
 		scanner.Add(handleJoinRequestIgnorePoolPatchPtrn, [this](PointerCalculator ptr) {
 			HandleJoinRequestIgnorePoolPatch = BytePatches::Add(ptr.Add(4).As<std::uint8_t*>(), 0xEB);
+		});
+
+		constexpr auto gameDataHashPtrn = Pattern<"48 8D 3D ? ? ? ? 69 C9">("GameDataHash");
+		scanner.Add(gameDataHashPtrn, [this](PointerCalculator ptr) {
+			GameDataHash = ptr.Add(3).Rip().As<CGameDataHash*>();
+		});
+
+		constexpr auto getDLCHashPtrn = Pattern<"3B 84 24 FC 01 00 00">("GetDLCHash&DLCManager");
+		scanner.Add(getDLCHashPtrn, [this](PointerCalculator ptr) {
+			DLCManager = ptr.Sub(13).Rip().As<void**>();
+			GetDLCHash = ptr.Sub(4).Rip().As<PVOID>();
+		});
+
+		constexpr auto encodeSessionInfoPtrn = Pattern<"E8 ? ? ? ? C6 ? ? ? 00 00 01 8B 87">("EncodeSessionInfo");
+		scanner.Add(encodeSessionInfoPtrn, [this](PointerCalculator ptr) {
+			EncodeSessionInfo = ptr.Add(1).Rip().As<Functions::EncodeSessionInfo>();
 		});
 
 		if (!scanner.Scan())
