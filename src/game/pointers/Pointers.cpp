@@ -391,11 +391,6 @@ namespace YimMenu
 			GetDLCHash = ptr.Sub(4).Rip().As<PVOID>();
 		});
 
-		constexpr auto encodeSessionInfoPtrn = Pattern<"E8 ? ? ? ? C6 ? ? ? 00 00 01 8B 87">("EncodeSessionInfo");
-		scanner.Add(encodeSessionInfoPtrn, [this](PointerCalculator ptr) {
-			EncodeSessionInfo = ptr.Add(1).Rip().As<Functions::EncodeSessionInfo>();
-		});
-
 		if (!scanner.Scan())
 		{
 			LOG(FATAL) << "Some patterns could not be found, unloading.";

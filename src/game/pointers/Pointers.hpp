@@ -66,7 +66,6 @@ namespace YimMenu
 		using GetSessionByGamerHandle = bool (*)(int profile_index, rage::rlGamerHandle* handles, int num_handles, rage::rlSessionByGamerTaskResult* results, int num_results, bool* success, rage::rlTaskStatus* state);
 		using GetPresenceAttributes = bool (*)(int profile_index, rage::rlScGamerHandle* handles, int num_handles, rage::rlQueryPresenceAttributesContext** contexts, int count, rage::rlScTaskStatus* state);
 		using GetAvatars = bool (*)(rage::rlGetAvatarsContext* context, rage::rlGetAvatarsPlayerList* players);
-		using EncodeSessionInfo = bool (*)(rage::rlSessionInfo* info, char* buffer, int buffer_size, int* bytes_written);
 	}
 
 	struct PointerData
@@ -155,8 +154,6 @@ namespace YimMenu
 		CGameDataHash* GameDataHash;
 		void** DLCManager;
 		PVOID GetDLCHash;
-		Functions::EncodeSessionInfo EncodeSessionInfo;
-		rage::rlSessionInfo* CurrentSessionInfo;
 	};
 
 	struct Pointers : PointerData
