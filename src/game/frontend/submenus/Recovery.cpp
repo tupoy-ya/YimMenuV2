@@ -1,39 +1,40 @@
 #include "Recovery.hpp"
-#include "game/frontend/items/Items.hpp"
-#include "game/features/recovery/GiveVehicleReward.hpp"
+#include "Recovery/HeistModifier.hpp"
 #include "Recovery/StatEditor.hpp"
 #include "Recovery/Transactions.hpp"
-#include "Recovery/HeistModifier.hpp"
+#include "game/frontend/items/Items.hpp"
 
 namespace YimMenu::Submenus
 {
 	Recovery::Recovery() :
 	    Submenu::Submenu("Recovery")
 	{
-		auto shopping = std::make_shared<Category>("Shopping");
-		auto missions = std::make_shared<Category>("Missions");
-		auto vehiclesGroup = std::make_shared<Group>("Vehicles");
-		auto generalGroup = std::make_shared<Group>("General");
+		auto missions   = std::make_shared<Category>("Missions");
+		auto businesses = std::make_shared<Category>("Businesses");
+		auto casino     = std::make_shared<Category>("Casino");
 
-		vehiclesGroup->AddItem(std::make_shared<BoolCommandItem>("dlcvehicles"_J));
-
-		vehiclesGroup->AddItem(std::make_unique<ImGuiItem>([] {
-			if (ImGui::Button("Save This Vehicle as Personal Vehicle"))
-			{
-				if (GiveVehicleReward::IsSafeToRunScript())
-				{
-					GiveVehicleReward::SetShouldRunScript(true);
-				}
-			}
-		}));
+		auto generalGroup  = std::make_shared<Group>("General");
+		auto businessGroup = std::make_shared<Group>("General");
+		auto casinoGroup   = std::make_shared<Group>("Slot Machines");
 
 		generalGroup->AddItem(std::make_shared<BoolCommandItem>("playallmissionssolo"_J));
 		generalGroup->AddItem(std::make_shared<CommandItem>("forcelaunchheist"_J));
+		generalGroup->AddItem(std::make_shared<BoolCommandItem>("unlockgtaplus"_J));
+		generalGroup->AddItem(std::make_shared<BoolCommandItem>("overriderpmultiplier"_J));
+		generalGroup->AddItem(std::make_shared<ConditionalItem>("overriderpmultiplier"_J, std::make_shared<FloatCommandItem>("rpmultiplierinput"_J)));
 
-		shopping->AddItem(vehiclesGroup);
+		businessGroup->AddItem(std::make_shared<ListCommandItem>("businesssafe"_J));
+		businessGroup->AddItem(std::make_shared<CommandItem>("claimsafeearnings"_J));
+
+		casinoGroup->AddItem(std::make_shared<BoolCommandItem>("casinomanipulaterigslotmachines"_J));
+
 		missions->AddItem(generalGroup);
-		AddCategory(std::move(shopping));
+		businesses->AddItem(businessGroup);
+		casino->AddItem(casinoGroup);
+
 		AddCategory(std::move(missions));
+		AddCategory(std::move(businesses));
+		AddCategory(std::move(casino));
 		AddCategory(BuildStatEditorMenu());
 		AddCategory(BuildTransactionsMenu());
 		AddCategory(BuildHeistModifierMenu());

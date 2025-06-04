@@ -349,11 +349,6 @@ namespace YimMenu
 			AllowPausingInSessionPatch = BytePatches::Add(ptr.Sub(0x1E).As<std::uint8_t*>(), 0xEB);
 		});
 
-		constexpr auto openPauseMenuPtrn = Pattern<"E9 ? ? ? ? B9 30 09 09 21">("OpenPauseMenu");
-		scanner.Add(openPauseMenuPtrn, [this](PointerCalculator ptr) {
-			OpenPauseMenu = ptr.Add(1).Rip().As<PVOID>();
-		});
-
 		constexpr auto getPoolTypePtrn = Pattern<"BA CE 94 A6 ED E8">("GetPoolType");
 		scanner.Add(getPoolTypePtrn, [this](PointerCalculator ptr) {
 			GetPoolType = ptr.Sub(19).As<PVOID>();
@@ -368,6 +363,21 @@ namespace YimMenu
 		constexpr auto handleJoinRequestIgnorePoolPatchPtrn = Pattern<"41 83 FF 05 ? 30 43">("HandleJoinRequestIgnorePoolPatch");
 		scanner.Add(handleJoinRequestIgnorePoolPatchPtrn, [this](PointerCalculator ptr) {
 			HandleJoinRequestIgnorePoolPatch = BytePatches::Add(ptr.Add(4).As<std::uint8_t*>(), 0xEB);
+		});
+
+		constexpr auto statsMpCharacterMappingDataPtrn = Pattern<"48 8D 0D ? ? ? ? 89 F2 0F 28 74 24 ? 48 83 C4 38">("CStatsMpCharacterMappingData");
+		scanner.Add(statsMpCharacterMappingDataPtrn, [this](PointerCalculator ptr) {
+			StatsMpCharacterMappingData = ptr.Add(3).Rip().As<CStatsMpCharacterMappingData*>();
+		});
+
+		static constexpr auto scMembershipStuffPtrn = Pattern<"48 8D 15 ? ? ? ? 41 B8 18 02 00 00 E8">("ScMembershipStuff");
+		scanner.Add(scMembershipStuffPtrn, [this](PointerCalculator addr) {
+			HasGTAPlus = addr.Add(3).Rip().As<int*>();
+		});
+
+		constexpr auto battlEyeServerProcessPlayerJoinPtrn = Pattern<"BA 2D AD 45 3F">("BattlEyeServerProcessPlayerJoin");
+		scanner.Add(battlEyeServerProcessPlayerJoinPtrn, [this](PointerCalculator ptr) {
+			BattlEyeServerProcessPlayerJoin = ptr.Sub(0x72).As<PVOID>();
 		});
 
 		constexpr auto gameDataHashPtrn = Pattern<"48 8D 3D ? ? ? ? 69 C9">("GameDataHash");

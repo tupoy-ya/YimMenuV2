@@ -41,6 +41,7 @@ class CStatsMgr;
 class CNetShopTransaction;
 class CNetworkSession;
 class CGameDataHash;
+class CStatsMpCharacterMappingData;
 
 namespace YimMenu
 {
@@ -145,10 +146,12 @@ namespace YimMenu
 		BytePatch GetLockOnPosPatch;
 		BytePatch ShouldAllowDriverLockOnPatch;
 		BytePatch AllowPausingInSessionPatch;
-		PVOID OpenPauseMenu;
 		PVOID GetPoolType;
 		BytePatch SetJoinRequestPoolTypePatch;
 		BytePatch HandleJoinRequestIgnorePoolPatch;
+		CStatsMpCharacterMappingData* StatsMpCharacterMappingData;
+		int* HasGTAPlus;
+		PVOID BattlEyeServerProcessPlayerJoin;
 		CGameDataHash* GameDataHash;
 		void** DLCManager;
 		PVOID GetDLCHash;

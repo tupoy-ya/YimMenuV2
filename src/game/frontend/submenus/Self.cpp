@@ -2,7 +2,8 @@
 
 #include "core/util/Joaat.hpp"
 #include "game/frontend/items/Items.hpp"
-#include "OutfitEditor.hpp"
+#include "Self/OutfitEditor.hpp"
+#include "Self/Weapons.hpp"
 
 namespace YimMenu::Submenus
 {
@@ -47,6 +48,8 @@ namespace YimMenu::Submenus
 		movementGroup->AddItem(std::make_shared<BoolCommandItem>("standonvehicles"_J));
 		movementGroup->AddItem(std::make_shared<BoolCommandItem>("disableactionmode"_J));
 		movementGroup->AddItem(std::make_shared<BoolCommandItem>("superrun"_J));
+		movementGroup->AddItem(std::make_shared<ConditionalItem>("superrun"_J, std::make_shared<FloatCommandItem>("superrunrunspeed"_J)));
+		movementGroup->AddItem(std::make_shared<ConditionalItem>("superrun"_J, std::make_shared<FloatCommandItem>("superrunsprintspeed"_J)));
 		movementGroup->AddItem(std::make_shared<BoolCommandItem>("superjump"_J));
 		movementGroup->AddItem(std::make_shared<BoolCommandItem>("noclip"_J));
 		movementGroup->AddItem(std::make_shared<ConditionalItem>("noclip"_J, std::make_shared<FloatCommandItem>("noclipspeed"_J)));
@@ -59,44 +62,7 @@ namespace YimMenu::Submenus
 		main->AddItem(movementGroup);
 		AddCategory(std::move(main));
 
-		auto weapons             = std::make_shared<Category>("Weapons");
-		auto weaponsGlobalsGroup = std::make_shared<Group>("Globals");
-		auto weaponsAimbotGroup  = std::make_shared<Group>("Aimbot", 1);
-
-		weaponsGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("infiniteammo"_J));
-		weaponsGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("infiniteclip"_J));
-		weaponsGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("rapidfire"_J));
-		weaponsGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("infiniteparachutes"_J));
-		weaponsGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("ExplosiveAmmo"_J));
-		weaponsGlobalsGroup->AddItem(std::make_shared<CommandItem>("giveallweapons"_J));
-
-		weaponsAimbotGroup->AddItem(std::make_shared<BoolCommandItem>("aimbot"_J));
-		weaponsAimbotGroup->AddItem(std::make_shared<ConditionalItem>("aimbot"_J, std::make_shared<BoolCommandItem>("aimbotaimforhead"_J)));
-		weaponsAimbotGroup->AddItem(std::make_shared<ConditionalItem>("aimbot"_J, std::make_shared<BoolCommandItem>("aimbottargetdrivers"_J)));
-
-		weapons->AddItem(weaponsGlobalsGroup);
-		weapons->AddItem(weaponsAimbotGroup);
-		AddCategory(std::move(weapons));
-
-		auto vehicle = std::make_shared<Category>("Vehicle");
-		auto vehicleGlobalsGroup = std::make_shared<Group>("Globals");
-		auto vehicleMiscGroup = std::make_shared<Group>("Misc");
-
-		vehicleGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("vehiclegodmode"_J, "Godmode"));
-		vehicleGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("keepfixed"_J, "Keep Fixed"));
-		vehicleGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("hornboost"_J));
-		vehicleGlobalsGroup->AddItem(std::make_shared<BoolCommandItem>("modifyboostbehavior"_J));
-		vehicleGlobalsGroup->AddItem(std::make_shared<ConditionalItem>("modifyboostbehavior"_J, std::make_shared<ListCommandItem>("boostbehavior"_J)));
-		vehicleGlobalsGroup->AddItem(std::make_shared<CommandItem>("repairvehicle"_J));
-		vehicleGlobalsGroup->AddItem(std::make_shared<CommandItem>("enterlastvehicle"_J));
-
-		vehicleMiscGroup->AddItem(std::make_shared<BoolCommandItem>("speedometer"_J));
-		vehicleMiscGroup->AddItem(std::make_shared<BoolCommandItem>("seatbelt"_J));
-		vehicleMiscGroup->AddItem(std::make_shared<BoolCommandItem>("allowhatsinvehicles"_J));
-
-		vehicle->AddItem(vehicleGlobalsGroup);
-		vehicle->AddItem(vehicleMiscGroup);
-		AddCategory(std::move(vehicle));
+		AddCategory(BuildWeaponsMenu());
 
 		auto outfitEditorCategory = YimMenu::CreateOutfitsMenu();
 		AddCategory(std::move(outfitEditorCategory));

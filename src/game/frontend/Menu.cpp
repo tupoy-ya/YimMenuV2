@@ -9,6 +9,7 @@
 #include "game/frontend/fonts/Fonts.hpp"
 #include "game/pointers/Pointers.hpp"
 #include "submenus/Self.hpp"
+#include "submenus/Vehicle.hpp"
 #include "submenus/Teleport.hpp"
 #include "submenus/Network.hpp"
 #include "submenus/Players.hpp"
@@ -17,12 +18,16 @@
 #include "submenus/Debug.hpp"
 #include "submenus/World.hpp"
 #include "core/filemgr/FileMgr.hpp"
+#include "core/memory/ModuleMgr.hpp"
+#include "Onboarding.hpp"
+
 namespace YimMenu
 {
 	void Menu::Init()
 	{
 		// Arguably the only place this file should be edited at for more menus
 		UIManager::AddSubmenu(std::make_shared<Submenus::Self>());
+		UIManager::AddSubmenu(std::make_shared<Submenus::Vehicle>());
 		UIManager::AddSubmenu(std::make_shared<Submenus::Teleport>());
 		UIManager::AddSubmenu(std::make_shared<Submenus::Network>());
 		UIManager::AddSubmenu(std::make_shared<Submenus::Players>());
@@ -33,6 +38,8 @@ namespace YimMenu
 
 		Renderer::AddRendererCallBack(
 		    [&] {
+			    ProcessOnboarding();
+
 			    if (!GUI::IsOpen())
 				    return;
 
@@ -40,9 +47,10 @@ namespace YimMenu
 			    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImU32(ImColor(15, 15, 15)));
 
 			    ImGui::SetNextWindowSize(ImVec2((*Pointers.ScreenResX / 2.5), (*Pointers.ScreenResY / 2.5)), ImGuiCond_Once);
-			    if (ImGui::Begin("YimMenuV2", nullptr, ImGuiWindowFlags_NoDecoration))
+			    if (ImGui::Begin("YimMenuV2", nullptr, ImGuiWindowFlags_NoDecoration & ~(ImGuiWindowFlags_NoResize)))
 			    {
-				    //ImGui::BeginDisabled(*Pointers.IsSessionStarted);
+					// TODO: should we just remove unload?
+				    ImGui::BeginDisabled(*Pointers.IsSessionStarted || ModuleMgr.IsManualMapped());
 				    if (ImGui::Button("Unload", ImVec2(120, 0)))
 				    {
 					    if (true)
@@ -57,7 +65,7 @@ namespace YimMenu
 						    g_Running = false;
 					    }
 				    }
-				    //ImGui::EndDisabled();
+				    ImGui::EndDisabled();
 
 				    UIManager::Draw();
 			    }

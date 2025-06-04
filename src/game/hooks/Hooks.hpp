@@ -5,6 +5,9 @@ class CNetworkPlayerMgr;
 class CNetGamePlayer;
 class CProjectBaseSyncDataNode;
 class CScriptedGameEvent;
+class CBattlEyePlayerModifyInterface;
+class CBattlEyePlayerModifyContext;
+
 namespace rage
 {
 	class netConnectionManager;
@@ -38,6 +41,7 @@ namespace YimMenu::Hooks
 		extern bool PrepareMetricForSending(rage::JsonSerializer* ser, void* a2, void* a3, rage::rlMetric* metric);
 		extern BOOL GetThreadContext(HANDLE hThread, LPCONTEXT lpContext);
 		extern void HttpStartRequest(void* request);
+		extern bool BattlEyeServerProcessPlayerJoin(CBattlEyePlayerModifyInterface* server_iface, CBattlEyePlayerModifyContext* context);
 	}
 
 	namespace Info
@@ -74,10 +78,5 @@ namespace YimMenu::Hooks
 	namespace Window
 	{
 		extern LRESULT WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
-	}
-
-	namespace Features
-	{
-		extern void OpenPauseMenu(uint32_t menuHash, bool pause, uint32_t unk1, bool unk2);
 	}
 }
