@@ -79,4 +79,9 @@ namespace YimMenu::Hooks
 	{
 		extern LRESULT WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
 	}
+
+	namespace Misc
+	{
+		extern bool AssistedAimShouldReleaseEntity(__int64 a1);
+	}
 }

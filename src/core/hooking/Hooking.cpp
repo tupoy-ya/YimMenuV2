@@ -39,6 +39,8 @@ namespace YimMenu
 
 		BaseHook::Add<Hooks::Network::GetPoolType>(new DetourHook("GetPoolType", Pointers.GetPoolType, Hooks::Network::GetPoolType));
 		BaseHook::Add<Hooks::Network::GetDLCHash>(new DetourHook("GetDLCHash", Pointers.GetDLCHash, Hooks::Network::GetDLCHash));
+
+		BaseHook::Add<Hooks::Misc::AssistedAimShouldReleaseEntity>(new DetourHook("AssistedAimShouldReleaseEntity", Pointers.AssistedAimShouldReleaseEntity, Hooks::Misc::AssistedAimShouldReleaseEntity));
 	}
 
 	Hooking::~Hooking()

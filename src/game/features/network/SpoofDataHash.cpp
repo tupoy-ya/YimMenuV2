@@ -24,7 +24,7 @@ namespace YimMenu::Features
 			{
 				log << "validHashes = {" << "\n";
 				for (int i = 0; i < hashes->m_Data.size(); i++)
-					log << hashes->m_Data[i].getData() << ",\n";
+					log << hashes->m_Data[i].getData() << ", // " << i << "\n";
 				log << "};";
 			}
 		}
