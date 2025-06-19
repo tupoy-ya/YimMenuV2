@@ -52,7 +52,7 @@ namespace YimMenu
 
 		constexpr auto versionPtrn = Pattern<"4C 8D 0D ? ? ? ? 48 8D 5C 24 ? 48 89 D9 48 89 FA">("Version");
 		scanner.Add(versionPtrn, [this](PointerCalculator ptr) {
-			GameVersion   = ptr.Add(3).Rip().As<const char*>();
+			GameVersion = ptr.Add(3).Rip().As<const char*>();
 			OnlineVersion = ptr.Add(0x47).Add(3).Rip().As<const char*>();
 		});
 
@@ -119,7 +119,7 @@ namespace YimMenu
 
 		constexpr auto regionCodePtrn = Pattern<"4C 8D 05 ? ? ? ? 48 89 F1 48 89 FA E8 ? ? ? ? 84 C0 74 3D">("RegionCode");
 		scanner.Add(regionCodePtrn, [this](PointerCalculator ptr) {
-			RegionCode = ptr.Add(3).Rip().As<int*>();		
+			RegionCode = ptr.Add(3).Rip().As<int*>();
 		});
 
 		constexpr auto networkObjectMgrPtrn = Pattern<"41 83 7E FA 02 40 0F 9C C5 C1 E5 02">("NetworkObjectMgr&GetSyncTreeForType");
@@ -133,9 +133,10 @@ namespace YimMenu
 			WriteNodeData = ptr.As<PVOID>();
 		});
 
-		constexpr auto shouldUseNodeCachePtrn = Pattern<"83 FA 20 74 1D 48 89 CE">("ShouldUseNodeCache");
+		constexpr auto shouldUseNodeCachePtrn = Pattern<"83 FA 20 74 1D 48 89 CE">("ShouldUseNodeCache&Nullsub");
 		scanner.Add(shouldUseNodeCachePtrn, [this](PointerCalculator ptr) {
 			ShouldUseNodeCache = ptr.Sub(5).As<PVOID>();
+			Nullsub = ptr.Add(0x29).As<PVOID>();
 		});
 
 		constexpr auto isNodeInScopePtrn = Pattern<"41 83 F9 02 74 22 48 8B 06">("IsNodeInScope");
@@ -223,7 +224,7 @@ namespace YimMenu
 		constexpr auto beDataPtrn = Pattern<"48 C7 05 ? ? ? ? 00 00 00 00 E8 ? ? ? ? 48 89 C1 E8 ? ? ? ? E8 ? ? ? ? BD 0A 00 00 00">("BEData");
 		scanner.Add(beDataPtrn, [this](PointerCalculator ptr) {
 			BERestartStatus = ptr.Add(3).Rip().Add(8).Add(4).As<int*>();
-			NeedsBERestart  = ptr.Add(3).Rip().Add(8).Add(4).Add(8).As<bool*>();
+			NeedsBERestart = ptr.Add(3).Rip().Add(8).Add(4).Add(8).As<bool*>();
 			IsBEBanned = ptr.Add(3).Rip().Add(8).Add(4).Add(8).Add(4).As<bool*>();
 		});
 
@@ -232,7 +233,7 @@ namespace YimMenu
 			BattlEyeStatusUpdatePatch = BytePatches::Add(ptr.Sub(0x26).As<std::uint8_t*>(), 0xC3);
 		});
 
-		constexpr auto writeNetArrayDataPtrn = Pattern<"0F 84 06 03 00 00 0F B6">("WriteNetArrayData");
+		constexpr auto writeNetArrayDataPtrn = Pattern<"0F 84 06 03 00 00 0F B6 83">("WriteNetArrayData");
 		scanner.Add(writeNetArrayDataPtrn, [this](PointerCalculator ptr) {
 			WriteNetArrayData = ptr.Sub(0x4E).As<PVOID>();
 			NetArrayMgr = ptr.Sub(0x32).Add(3).As<rage::netArrayMgr**>();
@@ -360,7 +361,7 @@ namespace YimMenu
 			SetJoinRequestPoolTypePatch = BytePatches::Add(ptr.Sub(5).As<std::uint8_t*>(), std::to_array<std::uint8_t>({0xB8, 0x00, 0x00, 0x00, 0x00}));
 		});
 
-		constexpr auto handleJoinRequestIgnorePoolPatchPtrn = Pattern<"41 83 FF 05 ? 30 43">("HandleJoinRequestIgnorePoolPatch");
+		constexpr auto handleJoinRequestIgnorePoolPatchPtrn = Pattern<"83 FD 05 ? ? ? 00 00 00 48 8B">("HandleJoinRequestIgnorePoolPatch");
 		scanner.Add(handleJoinRequestIgnorePoolPatchPtrn, [this](PointerCalculator ptr) {
 			HandleJoinRequestIgnorePoolPatch = BytePatches::Add(ptr.Add(4).As<std::uint8_t*>(), 0xEB);
 		});
@@ -399,6 +400,27 @@ namespace YimMenu
 		constexpr auto assistedAimFindNewTargetPtrn = Pattern<"0F 84 C9 00 00 00 48 89 CE 48 89 F9">("AssistedAimFindNewTarget");
 		scanner.Add(assistedAimFindNewTargetPtrn, [this](PointerCalculator ptr) {
 			AssistedAimFindNewTarget = ptr.Sub(0x33).As<Functions::AssistedAimFindNewTarget>();
+		});
+
+		constexpr auto gameSkeletonPtrn = Pattern<"0F B6 C0 8D 14 00 83 C2 02">("GameSkeleton");
+		scanner.Add(gameSkeletonPtrn, [this](PointerCalculator ptr) {
+			GameSkeleton = ptr.Add(0x9).Add(3).Rip().As<rage::gameSkeleton*>();
+		});
+
+		constexpr auto anticheatInitializedHashPtrn = Pattern<"89 9E C8 00 00 00 48 8B 0D ? ? ? ? 48 85 C9 74 46">("AnticheatInitializedHash&GetAnticheatInitializedHash");
+		scanner.Add(anticheatInitializedHashPtrn, [this](PointerCalculator ptr) {
+			AnticheatInitializedHash = ptr.Add(9).Rip().As<rage::Obf32**>();
+			GetAnticheatInitializedHash = ptr.Add(0x13).Rip().As<PVOID>();
+		});
+
+		constexpr auto anticheatContextPtrn = Pattern<"48 8D BB 70 0A 00 00 4C 8D 35 ? ? ? ? 66 90">("AnticheatContext");
+		scanner.Add(anticheatContextPtrn, [this](PointerCalculator ptr) {
+			AnticheatContext = ptr.Sub(0x12).Add(3).Rip().As<CAnticheatContext**>();
+		});
+
+		constexpr auto getAnticheatInitializedHash2Ptrn = Pattern<"89 9E E8 00 00 00 89 C2 E8 ? ? ? ? 69">("GetAnticheatInitializedHash2");
+		scanner.Add(getAnticheatInitializedHash2Ptrn, [this](PointerCalculator ptr) {
+			GetAnticheatInitializedHash2 = ptr.Add(0x9).Rip().As<PVOID>();
 		});
 
 		if (!scanner.Scan())
@@ -448,7 +470,7 @@ namespace YimMenu
 
 		constexpr auto readAttributePatch2Ptrn = Pattern<"32 C0 EB ? C7 83">("ReadAttributesPatch2");
 		scanner.Add(readAttributePatch2Ptrn, [this](PointerCalculator ptr) {
-			BytePatches::Add(ptr.As<void*>(), std::to_array<std::uint8_t>({0xB0, 0x01}))->Apply(); 
+			BytePatches::Add(ptr.As<void*>(), std::to_array<std::uint8_t>({0xB0, 0x01}))->Apply();
 		});
 
 		constexpr auto getAvatarsPtrn = Pattern<"89 4E 7C 48 8B CE E8 ? ? ? ? 84 C0">("GetAvatars");

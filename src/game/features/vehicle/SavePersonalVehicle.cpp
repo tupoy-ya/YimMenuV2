@@ -26,21 +26,21 @@ namespace YimMenu::Features
 				if (m_StartedByUs && m_Thread)
 				{
 					m_Thread->m_Context.m_State = rage::scrThread::State::KILLED;
-					m_StartedByUs               = false;
+					m_StartedByUs = false;
 				}
-				m_Thread          = nullptr;
+				m_Thread = nullptr;
 				m_ShouldRunScript = false;
 				continue;
 			}
 
 			if (!m_Thread)
 			{
-				int id   = Scripts::StartScript("AM_MP_VEHICLE_REWARD"_J, eStackSizes::FRIEND);
+				int id = Scripts::StartScript("AM_MP_VEHICLE_REWARD"_J, eStackSizes::FRIEND);
 				m_Thread = Scripts::FindScriptThreadByID(id);
 				if (m_Thread)
 				{
 					m_Thread->m_Context.m_State = rage::scrThread::State::PAUSED;
-					m_StartedByUs               = true;
+					m_StartedByUs = true;
 				}
 				else
 				{
@@ -58,21 +58,24 @@ namespace YimMenu::Features
 					if (VehicleRewardData->ControlStatus != 3)
 					{
 						VehicleRewardData->TransactionStatus = 0;
-						VehicleRewardData->Garage            = 0;
-						VehicleRewardData->GarageOffset      = 0;
-						VehicleRewardData->ControlStatus     = 0;
+						VehicleRewardData->Garage = 0;
+						VehicleRewardData->GarageOffset = 0;
+						VehicleRewardData->ControlStatus = 0;
 						if (m_StartedByUs)
 						{
 							m_Thread->m_Context.m_State = rage::scrThread::State::KILLED;
-							m_StartedByUs               = false;
+							m_StartedByUs = false;
 						}
-						m_Thread          = nullptr;
+						m_Thread = nullptr;
 						m_ShouldRunScript = false;
 					}
 				}
 			}
 		}
 	}
+
+	// Some vehicles cannot be safely acquired using this method, see #443
+	static const std::unordered_set<std::uint32_t> s_BlacklistedVehicles = {"rcbandito"_J, "minitank"_J, "thruster"_J, "terbyte"_J, "avenger"_J, "hauler2"_J, "phantom3"_J, "speedo4"_J, "pounder2"_J, "mule4"_J, "kosatka"_J, "policet3"_J, "brickade2"_J};
 
 	class _SavePersonalVehicle : public Command
 	{
@@ -93,7 +96,7 @@ namespace YimMenu::Features
 			}
 
 			static ScriptFunction isVehicleValidForPV("freemode"_J, ScriptPointer("IsVehicleValidForPV", "5D ? ? ? 2A 06 56 13 00 38 00").Add(1).Rip());
-			if (!isVehicleValidForPV.Call<bool>(Self::GetVehicle().GetModel()))
+			if (s_BlacklistedVehicles.contains(Self::GetVehicle().GetModel()) || !isVehicleValidForPV.Call<bool>(Self::GetVehicle().GetModel()))
 			{
 				Notifications::Show("Save Personal Vehicle", "This vehicle cannot be saved as a personal vehicle.", NotificationType::Error);
 				return;

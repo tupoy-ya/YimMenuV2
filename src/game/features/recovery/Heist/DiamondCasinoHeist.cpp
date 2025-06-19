@@ -23,7 +23,7 @@ namespace YimMenu::Features
 
 			virtual void OnCall() override
 			{
-				auto base = ScriptGlobal(1966898).At(1497).At(736).At(92);
+				auto base = ScriptGlobal(1968996).At(1497).At(736).At(92);
 
 				*base.At(1).As<int*>() = _DiamondCasinoHeistCut1.GetState();
 				*base.At(2).As<int*>() = _DiamondCasinoHeistCut2.GetState();
@@ -38,74 +38,28 @@ namespace YimMenu::Features
 
 			virtual void OnCall() override
 			{
-				auto base = ScriptGlobal(1971261);
+				auto base = ScriptGlobal(1973359);
 
 				*base.At(0, 68).At(8).At(0).As<int*>() = 1;
 				*base.At(1, 68).At(8).At(1).As<int*>() = 1;
-				*base.At(2, 68).At(8).At(2).As<int*>() = 1; 
+				*base.At(2, 68).At(8).At(2).As<int*>() = 1;
 				*base.At(3, 68).At(8).At(3).As<int*>() = 1;
 			}
 		};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistDifficulty = {
-			{0, "Normal"},
-			{1, "Hard"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistDifficulty = {{0, "Normal"}, {1, "Hard"}};
 		static ListCommand _DiamondCasinoHeistDifficulty{"diamondcasinoheistdifficulty", "Difficulty", "Heist difficulty", diamondCasinoHeistDifficulty, 0};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistPrimaryTarget = {
-			{3, "Diamonds"},
-			{1, "Gold"},
-			{2, "Artwork"},
-			{0, "Cash"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistPrimaryTarget = {{3, "Diamonds"}, {1, "Gold"}, {2, "Artwork"}, {0, "Cash"}};
 		static ListCommand _DiamondCasinoHeistPrimaryTarget{"diamondcasinoheistprimarytarget", "Primary Target", "Primary target", diamondCasinoHeistPrimaryTarget, 3};
 
-		static ListCommand* _DiamondCasinoHeistGunmanPtr   = nullptr;
+		static ListCommand* _DiamondCasinoHeistGunmanPtr = nullptr;
 		static ListCommand* _DiamondCasinoHeistApproachPtr = nullptr;
 
-		static std::vector<std::vector<std::vector<std::pair<int, const char*>>>> diamondCasinoHeistWeapon = {
-			{
-				{{0, "MK II Shotgun Loadout"}, {1, "MK II Rifle Loadout"}},
-				{{0, "MK II SMG Loadout"}, {1, "MK II Rifle Loadout"}},
-				{{0, "MK II Shotgun Loadout"}, {1, "MK II Rifle Loadout"}}
-			},
-			{
-				{{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}},
-				{{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}},
-				{{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}}
-			},
-			{
-				{{0, "Combat PDW Loadout"}, {1, "Rifle Loadout"}},
-				{{0, "Shotgun Loadout"}, {1, "Rifle Loadout"}},
-				{{0, "Shotgun Loadout"}, {1, "Combat MG Loadout"}}
-			},
-			{
-				{{0, "SMG Loadout"}, {1, "Shotgun Loadout"}},
-				{{0, "Machine Pistol Loadout"}, {1, "Shotgun Loadout"}},
-				{{0, "SMG Loadout"}, {1, "Shotgun Loadout"}}
-			},
-			{
-				{{0, "Micro SMG Loadout"}, {1, "Machine Pistol Loadout"}},
-				{{0, "Micro SMG Loadout"}, {1, "Shotgun Loadout"}},
-				{{0, "Shotgun Loadout"}, {1, "Revolver Loadout"}}
-			},
-			{
-				{{0, "                                        "}, {1, ""}},
-				{{0, ""}, {1, ""}},
-				{{0, ""}, {1, ""}}
-			}
-		};
+		static std::vector<std::vector<std::vector<std::pair<int, const char*>>>> diamondCasinoHeistWeapon = {{{{0, "MK II Shotgun Loadout"}, {1, "MK II Rifle Loadout"}}, {{0, "MK II SMG Loadout"}, {1, "MK II Rifle Loadout"}}, {{0, "MK II Shotgun Loadout"}, {1, "MK II Rifle Loadout"}}}, {{{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}}, {{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}}, {{0, "Rifle Loadout"}, {1, "Shotgun Loadout"}}}, {{{0, "Combat PDW Loadout"}, {1, "Rifle Loadout"}}, {{0, "Shotgun Loadout"}, {1, "Rifle Loadout"}}, {{0, "Shotgun Loadout"}, {1, "Combat MG Loadout"}}}, {{{0, "SMG Loadout"}, {1, "Shotgun Loadout"}}, {{0, "Machine Pistol Loadout"}, {1, "Shotgun Loadout"}}, {{0, "SMG Loadout"}, {1, "Shotgun Loadout"}}}, {{{0, "Micro SMG Loadout"}, {1, "Machine Pistol Loadout"}}, {{0, "Micro SMG Loadout"}, {1, "Shotgun Loadout"}}, {{0, "Shotgun Loadout"}, {1, "Revolver Loadout"}}}, {{{0, "                                        "}, {1, ""}}, {{0, ""}, {1, ""}}, {{0, ""}, {1, ""}}}};
 		static ListCommand _DiamondCasinoHeistWeapon{"diamondcasinoheistweapon", "Weapon", "Weapon", diamondCasinoHeistWeapon[5][0], 0};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistGunman = {
-			{0, "Chester McCoy"},
-			{1, "Gustavo Mota"},
-			{2, "Patrick McReary"},
-			{3, "Charlie Reed"},
-			{4, "Karl Abolaji"},
-			{5, "Remove Gunman"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistGunman = {{0, "Chester McCoy"}, {1, "Gustavo Mota"}, {2, "Patrick McReary"}, {3, "Charlie Reed"}, {4, "Karl Abolaji"}, {5, "Remove Gunman"}};
 
 		class Gunman : public ListCommand
 		{
@@ -113,17 +67,14 @@ namespace YimMenu::Features
 
 			virtual void OnChange() override
 			{
-				_DiamondCasinoHeistWeapon.SetList(diamondCasinoHeistWeapon[this->GetState()][_DiamondCasinoHeistApproachPtr->GetState()]);
+				_DiamondCasinoHeistWeapon.SetList(
+				    diamondCasinoHeistWeapon[this->GetState()][_DiamondCasinoHeistApproachPtr->GetState()]);
 				_DiamondCasinoHeistWeapon.SetState(0);
 			}
 		};
 		static Gunman _DiamondCasinoHeistGunman{"diamondcasinoheistgunman", "Gunman", "Gunman", diamondCasinoHeistGunman, 5};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistApproach = {
-			{0, "Silent & Sneaky"},
-			{1, "The Big Con"},
-			{2, "Aggressive"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistApproach = {{0, "Silent & Sneaky"}, {1, "The Big Con"}, {2, "Aggressive"}};
 
 		class Approach : public ListCommand
 		{
@@ -131,7 +82,8 @@ namespace YimMenu::Features
 
 			virtual void OnChange() override
 			{
-				_DiamondCasinoHeistWeapon.SetList(diamondCasinoHeistWeapon[_DiamondCasinoHeistGunmanPtr->GetState()][this->GetState()]);
+				_DiamondCasinoHeistWeapon.SetList(
+				    diamondCasinoHeistWeapon[_DiamondCasinoHeistGunmanPtr->GetState()][this->GetState()]);
 				_DiamondCasinoHeistWeapon.SetState(0);
 			}
 		};
@@ -141,29 +93,15 @@ namespace YimMenu::Features
 		{
 			InitPtrs()
 			{
-				_DiamondCasinoHeistGunmanPtr   = &_DiamondCasinoHeistGunman;
+				_DiamondCasinoHeistGunmanPtr = &_DiamondCasinoHeistGunman;
 				_DiamondCasinoHeistApproachPtr = &_DiamondCasinoHeistApproach;
 			}
 		} _initPtrs;
 
-		static std::vector<std::vector<std::pair<int, const char*>>> diamondCasinoHeistVehicle = {
-			{{0, "Zhaba"}, {1, "Vagrant"}, {2, "Outlaw"}, {3, "Everon"}},
-			{{0, "Sultan Classic"}, {1, "Gauntlet Classic"}, {2, "Ellie"}, {3, "Komoda"}},
-			{{0, "Retinue MK II"}, {1, "Drifty Yosemite"}, {2, "Sugoi"}, {3, "Jugular"}},
-			{{0, "Manchez"}, {1, "Stryder"}, {2, "Defiler"}, {3, "Lectro"}},
-			{{0, "Issi Classic"}, {1, "Asbo"}, {2, "Kanjo"}, {3, "Sentinel Classic"}},
-			{{0, "                           "}, {1, ""}, {2, ""}, {3, ""}}
-		};
+		static std::vector<std::vector<std::pair<int, const char*>>> diamondCasinoHeistVehicle = {{{0, "Zhaba"}, {1, "Vagrant"}, {2, "Outlaw"}, {3, "Everon"}}, {{0, "Sultan Classic"}, {1, "Gauntlet Classic"}, {2, "Ellie"}, {3, "Komoda"}}, {{0, "Retinue MK II"}, {1, "Drifty Yosemite"}, {2, "Sugoi"}, {3, "Jugular"}}, {{0, "Manchez"}, {1, "Stryder"}, {2, "Defiler"}, {3, "Lectro"}}, {{0, "Issi Classic"}, {1, "Asbo"}, {2, "Kanjo"}, {3, "Sentinel Classic"}}, {{0, "                           "}, {1, ""}, {2, ""}, {3, ""}}};
 		static ListCommand _DiamondCasinoHeistVehicle{"diamondcasinoheistvehicle", "Vehicle", "Vehicle", diamondCasinoHeistVehicle[5], 0};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistDriver = {
-			{0, "Chester McCoy"},
-			{1, "Eddie Toh"},
-			{2, "Taliana Martinez"},
-			{3, "Zach Nelson"},
-			{4, "Karim Denz"},
-			{5, "Remove Driver"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistDriver = {{0, "Chester McCoy"}, {1, "Eddie Toh"}, {2, "Taliana Martinez"}, {3, "Zach Nelson"}, {4, "Karim Denz"}, {5, "Remove Driver"}};
 
 		class Driver : public ListCommand
 		{
@@ -177,14 +115,7 @@ namespace YimMenu::Features
 		};
 		static Driver _DiamondCasinoHeistDriver{"diamondcasinoheistdriver", "Driver", "Driver", diamondCasinoHeistDriver, 5};
 
-		static std::vector<std::pair<int, const char*>> diamondCasinoHeistHacker = {
-			{4, "Avi Schwartzman"},
-			{5, "Paige Harris"},
-			{2, "Christian Feltz"},
-			{3, "Yohan Blair"},
-			{1, "Rickie Lukens"},
-			{6, "Remove Hacker"}
-		};
+		static std::vector<std::pair<int, const char*>> diamondCasinoHeistHacker = {{4, "Avi Schwartzman"}, {5, "Paige Harris"}, {2, "Christian Feltz"}, {3, "Yohan Blair"}, {1, "Rickie Lukens"}, {6, "Remove Hacker"}};
 		static ListCommand _DiamondCasinoHeistHacker{"diamondcasinoheisthacker", "Hacker", "Hacker", diamondCasinoHeistHacker, 6};
 
 		class Setup : public Command
@@ -207,7 +138,7 @@ namespace YimMenu::Features
 				case 1: Stats::SetInt("MPX_H3_HARD_APPROACH", _DiamondCasinoHeistApproach.GetState() + 1); break;
 				default: break;
 				}
-				
+
 				Stats::SetInt("MPX_H3OPT_TARGET", _DiamondCasinoHeistPrimaryTarget.GetState());
 				Stats::SetInt("MPX_H3OPT_POI", 1023);
 				Stats::SetInt("MPX_H3OPT_ACCESSPOINTS", 2047);
@@ -237,7 +168,7 @@ namespace YimMenu::Features
 				Stats::SetInt("MPX_H3OPT_CREWHACKER", _DiamondCasinoHeistHacker.GetState());
 				Stats::SetInt("MPX_H3OPT_DISRUPTSHIP", 3); // Security Strength: 1 = Strong, 2 = Medium, 3 = Weak
 				Stats::SetInt("MPX_H3OPT_BODYARMORLVL", -1);
-				Stats::SetInt("MPX_H3OPT_KEYLEVELS", 2);   // 1 = Level1 Security Pass, 2 = Level2 Security Pass
+				Stats::SetInt("MPX_H3OPT_KEYLEVELS", 2); // 1 = Level1 Security Pass, 2 = Level2 Security Pass
 
 				Stats::SetInt("MPX_H3OPT_BITSET0", rand() % (INT_MAX)); // Refresh board
 				Stats::SetInt("MPX_H3OPT_BITSET1", rand() % (INT_MAX)); // Refresh board
@@ -250,7 +181,7 @@ namespace YimMenu::Features
 		};
 
 		static IntCommand _DiamondCasinoHeistPotentialTake{"diamondcasinoheistpotentialtake", "Potential Take", "Updates potential take", std::nullopt, std::nullopt, 0};
-		
+
 		class SetPotentialTake : public Command
 		{
 			using Command::Command;
@@ -293,7 +224,7 @@ namespace YimMenu::Features
 				}
 			}
 		};
-		
+
 		static IntCommand _DiamondCasinoHeistActualTake{"diamondcasinoheistactualtake", "Actual Take", "Updates actual take", std::nullopt, std::nullopt, 0};
 
 		class SetActualTake : public Command
@@ -302,7 +233,7 @@ namespace YimMenu::Features
 
 			virtual void OnCall() override
 			{
-				*ScriptLocal("fm_mission_controller"_J, 20387).At(2686).As<int*>() = _DiamondCasinoHeistActualTake.GetState();
+				*ScriptLocal("fm_mission_controller"_J, 20391).At(2686).As<int*>() = _DiamondCasinoHeistActualTake.GetState();
 			}
 		};
 
@@ -312,8 +243,8 @@ namespace YimMenu::Features
 
 			virtual void OnCall() override
 			{
-				*ScriptLocal("fm_mission_controller"_J, 53999).As<int*>() = 5;
-				*ScriptLocal("fm_mission_controller"_J, 55065).As<int*>() = 5;
+				*ScriptLocal("fm_mission_controller"_J, 54037).As<int*>() = 5;
+				*ScriptLocal("fm_mission_controller"_J, 55103).As<int*>() = 5;
 			}
 		};
 
@@ -323,7 +254,8 @@ namespace YimMenu::Features
 
 			virtual void OnCall() override
 			{
-				*ScriptLocal("fm_mission_controller"_J, 10547).At(7).As<int*>() = *ScriptLocal("fm_mission_controller"_J, 10547).At(37).As<int*>();
+				*ScriptLocal("fm_mission_controller"_J, 10549).At(7).As<int*>() =
+				    *ScriptLocal("fm_mission_controller"_J, 10549).At(37).As<int*>();
 			}
 		};
 
@@ -336,12 +268,12 @@ namespace YimMenu::Features
 				Scripts::ForceScriptHost(Scripts::FindScriptThread("fm_mission_controller"_J));
 				ScriptMgr::Yield(500ms);
 
-				*ScriptLocal("fm_mission_controller"_J, 20387).At(1740).At(1).As<int*>() = 80;
-				*ScriptLocal("fm_mission_controller"_J, 20387).At(2686).As<int*>() = 4443220;
-				*ScriptLocal("fm_mission_controller"_J, 20387).At(1062).As<int*>() = 5;
-				*ScriptLocal("fm_mission_controller"_J, 20387).As<int*>() = 12;
-				*ScriptLocal("fm_mission_controller"_J, 29006).At(1).As<int*>() = 99999;
-				*ScriptLocal("fm_mission_controller"_J, 32462).At(1).At(68).As<int*>() = 99999;
+				*ScriptLocal("fm_mission_controller"_J, 20391).At(1740).At(1).As<int*>() = 80;
+				*ScriptLocal("fm_mission_controller"_J, 20391).At(2686).As<int*>() = 4443220;
+				*ScriptLocal("fm_mission_controller"_J, 20391).At(1062).As<int*>() = 5;
+				*ScriptLocal("fm_mission_controller"_J, 20391).As<int*>() = 12;
+				*ScriptLocal("fm_mission_controller"_J, 29011).At(1).As<int*>() = 99999;
+				*ScriptLocal("fm_mission_controller"_J, 32467).At(1).At(68).As<int*>() = 99999;
 			}
 		};
 

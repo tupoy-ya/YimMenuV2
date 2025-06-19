@@ -3,19 +3,20 @@
 
 namespace YimMenu
 {
+	// TODO: this should be called something else
 	struct CommandLink
 	{
 	public:
 		std::vector<int> m_Chain{};
-		bool m_BeingModified = false;
 
-		CommandLink(){};
+		CommandLink() {};
 	};
 
-	class HotkeySystem : 
-		private IStateSerializer
+	class HotkeySystem :
+	    private IStateSerializer
 	{
 		std::chrono::system_clock::time_point m_LastHotkeyTriggerTime;
+		bool m_BeingModified;
 
 	public:
 		HotkeySystem();
@@ -31,6 +32,8 @@ namespace YimMenu
 
 		virtual void SaveStateImpl(nlohmann::json& state) override;
 		virtual void LoadStateImpl(nlohmann::json& state) override;
+
+		static void SetBeingModifed(bool being_modified);
 	};
 
 	inline HotkeySystem g_HotkeySystem;

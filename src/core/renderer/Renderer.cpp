@@ -23,10 +23,13 @@ namespace YimMenu
 
 	void Renderer::DestroyImpl()
 	{
+		if (!m_Initialized)
+			return;
+
 		// TODO: we aren't destroying resources properly
 		ImGui_ImplWin32_Shutdown();
 
-		
+
 		WaitForLastFrame();
 		ImGui_ImplDX12_InvalidateDeviceObjects();
 
@@ -39,12 +42,12 @@ namespace YimMenu
 
 		ImGui::DestroyContext();
 
-	#if 0
+#if 0
 		// manually destroy the allocators we created for the rest of the frame contexts
 		for (size_t i = 1; i < m_SwapChainDesc.BufferCount; ++i)
 			if (m_FrameContext[i].CommandAllocator)
 				m_FrameContext[i].CommandAllocator->Release();
-	#endif	
+#endif
 	}
 
 	bool Renderer::InitDX12()
@@ -135,7 +138,7 @@ namespace YimMenu
 		// create the rest of the allocators
 		for (size_t i = 1; i < m_SwapChainDesc.BufferCount; ++i)
 		{
-			if (const auto result = m_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator),  (void**)&m_FrameContext[i].CommandAllocator); result < 0)
+			if (const auto result = m_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), (void**)&m_FrameContext[i].CommandAllocator); result < 0)
 			{
 				LOG(WARNING) << "Failed to create secondary Command Allocator with result: [" << result << "]";
 
@@ -206,6 +209,7 @@ namespace YimMenu
 		ImGui::StyleColorsDark();
 
 		LOG(INFO) << "DirectX 12 renderer has finished initializing.";
+		m_Initialized = true;
 		return true;
 	}
 
@@ -282,11 +286,11 @@ namespace YimMenu
 
 	void Renderer::WaitForNextFrame()
 	{
-		UINT NextFrameIndex        = GetInstance().m_FrameIndex + 1;
+		UINT NextFrameIndex = GetInstance().m_FrameIndex + 1;
 		GetInstance().m_FrameIndex = NextFrameIndex;
 
 		HANDLE WaitableObjects[] = {GetInstance().m_SwapchainWaitableObject, nullptr};
-		DWORD NumWaitableObjets  = 1;
+		DWORD NumWaitableObjets = 1;
 
 		FrameContext FrameCtx = GetInstance().m_FrameContext[NextFrameIndex % GetInstance().m_SwapChainDesc.BufferCount];
 		UINT64 FenceValue = FrameCtx.FenceValue;
@@ -295,7 +299,7 @@ namespace YimMenu
 			FrameCtx.FenceValue = 0;
 			GetInstance().m_Fence->SetEventOnCompletion(FenceValue, GetInstance().m_FenceEvent);
 			WaitableObjects[1] = GetInstance().m_FenceEvent;
-			NumWaitableObjets  = 2;
+			NumWaitableObjets = 2;
 		}
 
 		WaitForMultipleObjects(NumWaitableObjets, WaitableObjects, TRUE, INFINITE);
@@ -344,7 +348,7 @@ namespace YimMenu
 	void Renderer::DX12EndFrame()
 	{
 		WaitForNextFrame();
-		
+
 		FrameContext& CurrentFrameContext{GetInstance().m_FrameContext[GetInstance().m_SwapChain->GetCurrentBackBufferIndex()]};
 		CurrentFrameContext.CommandAllocator->Reset();
 
@@ -361,7 +365,7 @@ namespace YimMenu
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), GetInstance().m_CommandList.Get());
 
 		Barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		Barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
+		Barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 		GetInstance().m_CommandList->ResourceBarrier(1, &Barrier);
 		GetInstance().m_CommandList->Close();
 

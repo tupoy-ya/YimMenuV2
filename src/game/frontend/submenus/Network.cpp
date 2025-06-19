@@ -3,13 +3,14 @@
 #include "core/frontend/Notifications.hpp"
 #include "game/frontend/items/Items.hpp"
 #include "game/frontend/submenus/Network/SavedPlayers.hpp"
-#include "game/frontend/submenus/network/RandomEvents.hpp"
+#include "game/frontend/submenus/Network/RandomEvents.hpp"
 #include "game/gta/Network.hpp"
 
 namespace YimMenu::Submenus
 {
 	Network::Network() :
-	    Submenu::Submenu("Network")
+		#define ICON_FA_ROUTE "\xef\x9b\xbf"
+	    Submenu::Submenu("Network", ICON_FA_ROUTE)
 	{
 		// TODO: this needs a rework
 		auto session = std::make_shared<Category>("Session");
@@ -76,12 +77,12 @@ namespace YimMenu::Submenus
 
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("fastjoin"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("disabledeathbarriers"_J));
-		enhancements->AddItem(std::make_shared<BoolCommandItem>("despawnbypass"_J)); // move this somewhere else?
+		enhancements->AddItem(std::make_shared<BoolCommandItem>("despawnbypass"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("bypasscasinogeoblock"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("forcescripthost"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("pausegame"_J));
 		enhancements->AddItem(std::make_shared<BoolCommandItem>("nocalls"_J));
-	
+
 		session->AddItem(joinGroup);
 		session->AddItem(bountyGroup);
 		session->AddItem(trollGroup);
@@ -98,7 +99,7 @@ namespace YimMenu::Submenus
 		matchmakingGroup->AddItem(std::make_shared<ConditionalItem>("cheaterpool"_J, spoofMMRegion, true));
 		matchmakingGroup->AddItem(std::make_shared<BoolCommandItem>("spoofdatahash"_J));
 		spoofing->AddItem(matchmakingGroup);
-	
+
 		AddCategory(std::move(session));
 		AddCategory(std::move(spoofing));
 		AddCategory(std::move(BuildSavedPlayersMenu()));

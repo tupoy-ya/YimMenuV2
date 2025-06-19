@@ -70,14 +70,14 @@ namespace YimMenu::Submenus
 					if (auto vehicle = Self::GetVehicle())
 						teleportEntity = vehicle;
 
-					auto coords            = teleportEntity.GetPosition();
-					teleportLocation.name  = newLocationName;
-					teleportLocation.x     = coords.x;
-					teleportLocation.y     = coords.y;
-					teleportLocation.z     = coords.z;
-					teleportLocation.yaw   = teleportEntity.GetHeading();
+					auto coords = teleportEntity.GetPosition();
+					teleportLocation.name = newLocationName;
+					teleportLocation.x = coords.x;
+					teleportLocation.y = coords.y;
+					teleportLocation.z = coords.z;
+					teleportLocation.yaw = teleportEntity.GetHeading();
 					teleportLocation.pitch = 0.0f; // why do we need pitch and roll anyway?
-					teleportLocation.roll  = 0.0f;
+					teleportLocation.roll = 0.0f;
 					SavedLocations::SaveNewLocation(category, teleportLocation);
 				}
 			});
@@ -166,9 +166,10 @@ namespace YimMenu::Submenus
 	}
 
 	Teleport::Teleport() :
-	    Submenu::Submenu("Teleport")
+		#define ICON_FA_TELEPORT "\xef\x8f\x85"
+	    Submenu::Submenu("Teleport", ICON_FA_TELEPORT)
 	{
-		auto main      = std::make_shared<Category>("Main");
+		auto main = std::make_shared<Category>("Main");
 		auto miscGroup = std::make_shared<Group>("Misc");
 
 		miscGroup->AddItem(std::make_shared<ConditionalItem>("autotptowaypoint"_J, std::make_shared<CommandItem>("tptowaypoint"_J), true));
@@ -177,6 +178,7 @@ namespace YimMenu::Submenus
 		// miscGroup->AddItem(std::make_shared<CommandItem>("tptotraintrack"_J));
 		// miscGroup->AddItem(std::make_shared<CommandItem>("tptomoonshineshack"_J));
 		// miscGroup->AddItem(std::make_shared<CommandItem>("tptonazar"_J));
+		miscGroup->AddItem(std::make_shared<CommandItem>("tptoobjective"_J));
 
 		main->AddItem(miscGroup);
 

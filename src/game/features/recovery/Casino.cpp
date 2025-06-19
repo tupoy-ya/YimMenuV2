@@ -2,6 +2,9 @@
 #include "game/backend/Self.hpp"
 #include "game/gta/Natives.hpp"
 #include "game/gta/ScriptLocal.hpp"
+#include "game/gta/Stats.hpp"
+#include "core/commands/ListCommand.hpp"
+#include "game/backend/Tunables.hpp"
 
 #include <set>
 
@@ -13,7 +16,7 @@ namespace YimMenu::Features
 		using LoopedCommand::LoopedCommand;
 
 		int slots_random_results_table = 1348;
-		std::set<int> slots_blacklist  = {9, 21, 22, 87, 152};
+		std::set<int> slots_blacklist = {9, 21, 22, 87, 152};
 
 		virtual void OnTick() override
 		{
@@ -21,7 +24,7 @@ namespace YimMenu::Features
 			{
 				Player casinoSlotsScriptHostPlayer = NETWORK::NETWORK_GET_HOST_OF_SCRIPT("casino_slots", -1, 0);
 				auto casinoSlotsScriptHostPlayerId = casinoSlotsScriptHostPlayer.GetId();
-				auto selfPlayerId                  = Self::GetPlayer().GetId();
+				auto selfPlayerId = Self::GetPlayer().GetId();
 				if (casinoSlotsScriptHostPlayerId != selfPlayerId)
 				{
 					Scripts::ForceScriptHost(Scripts::FindScriptThread("casino_slots"_J));
@@ -58,7 +61,7 @@ namespace YimMenu::Features
 			{
 				Player casinoSlotsScriptHostPlayer = NETWORK::NETWORK_GET_HOST_OF_SCRIPT("casino_slots", -1, 0);
 				auto casinoSlotsScriptHostPlayerId = casinoSlotsScriptHostPlayer.GetId();
-				auto selfPlayerId                  = Self::GetPlayer().GetId();
+				auto selfPlayerId = Self::GetPlayer().GetId();
 				if (casinoSlotsScriptHostPlayerId != selfPlayerId)
 				{
 					Scripts::ForceScriptHost(Scripts::FindScriptThread("casino_slots"_J));
@@ -79,5 +82,4 @@ namespace YimMenu::Features
 	};
 
 	static CasinoManipulateRigSlotMachines _CasinoManipulateRigSlotMachines{"casinomanipulaterigslotmachines", "Manipulate Rig Slot Machines", "Lets you win the Rig Slot Machines every time"};
-
 }

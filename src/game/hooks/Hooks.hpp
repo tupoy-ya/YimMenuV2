@@ -29,7 +29,7 @@ namespace YimMenu::Hooks
 {
 	namespace SwapChain
 	{
-		constexpr auto VMTPresentIdx       = 8;
+		constexpr auto VMTPresentIdx = 8;
 		constexpr auto VMTResizeBuffersIdx = 13;
 		extern HRESULT Present(IDXGISwapChain* that, UINT syncInterval, UINT flags);
 		extern HRESULT ResizeBuffers(IDXGISwapChain* that, UINT bufferCount, UINT width, UINT height, DXGI_FORMAT newFormat, UINT swapChainFlags);
@@ -42,6 +42,8 @@ namespace YimMenu::Hooks
 		extern BOOL GetThreadContext(HANDLE hThread, LPCONTEXT lpContext);
 		extern void HttpStartRequest(void* request);
 		extern bool BattlEyeServerProcessPlayerJoin(CBattlEyePlayerModifyInterface* server_iface, CBattlEyePlayerModifyContext* context);
+		extern std::uint32_t GetAnticheatInitializedHash();
+		extern std::uint32_t GetAnticheatInitializedHash2(void* ac_var, std::uint32_t seed);
 	}
 
 	namespace Info

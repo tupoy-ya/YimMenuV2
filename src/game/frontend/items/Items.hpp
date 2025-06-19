@@ -14,6 +14,7 @@ namespace YimMenu
 	class Command;
 	class ColorCommand;
 	class StringCommand;
+	class CommandLink;
 
 	class Button : public UIItem
 	{
@@ -64,10 +65,11 @@ namespace YimMenu
 	class IntCommandItem : public UIItem
 	{
 	public:
-		explicit IntCommandItem(joaat_t id, std::optional<std::string> label_override = std::nullopt);
+		explicit IntCommandItem(joaat_t id, std::optional<std::string> label_override = std::nullopt, bool use_slider = true);
 		void Draw() override;
 
 	private:
+		bool m_useSlider;
 		IntCommand* m_Command;
 		std::optional<std::string> m_LabelOverride;
 	};
@@ -75,10 +77,11 @@ namespace YimMenu
 	class FloatCommandItem : public UIItem
 	{
 	public:
-		explicit FloatCommandItem(joaat_t id, std::optional<std::string> label_override = std::nullopt);
+		explicit FloatCommandItem(joaat_t id, std::optional<std::string> label_override = std::nullopt, bool use_slider = true);
 		void Draw() override;
 
 	private:
+		bool m_useSlider;
 		FloatCommand* m_Command;
 		std::optional<std::string> m_LabelOverride;
 	};
@@ -132,23 +135,12 @@ namespace YimMenu
 		std::function<void()> m_Callback;
 	};
 
-	class HotkeySetter : public UIItem
-	{
-	public:
-
-		explicit HotkeySetter(joaat_t);
-		void Draw() override;
-
-	private:
-		joaat_t m_Id;
-	};
-
 	class Group : public UIItem
 	{
 	public:
 		explicit Group(const std::string& name, int items_per_row = 7);
 		void Draw() override;
-		
+
 		void AddItem(std::shared_ptr<UIItem>&& item)
 		{
 			m_Items.push_back(std::move(item));
@@ -202,6 +194,22 @@ namespace YimMenu
 	{
 	public:
 		explicit TabItem(const std::string& name);
+		void Draw() override;
+
+		void AddItem(std::shared_ptr<UIItem>&& item)
+		{
+			m_Items.push_back(std::move(item));
+		}
+
+	private:
+		std::string m_Name;
+		std::vector<std::shared_ptr<UIItem>> m_Items;
+	};
+
+	class CollapsingHeaderItem : public UIItem
+	{
+	public:
+		explicit CollapsingHeaderItem(const std::string& name);
 		void Draw() override;
 
 		void AddItem(std::shared_ptr<UIItem>&& item)

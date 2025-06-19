@@ -4,7 +4,7 @@
 
 namespace rage
 {
-	template <typename T>
+	template<typename T>
 	class ObfVar
 	{
 	private:
@@ -22,7 +22,7 @@ namespace rage
 			return v28 | v94;
 		}
 
-		operator T ()
+		operator T()
 		{
 			return getData();
 		}
@@ -39,7 +39,7 @@ namespace rage
 			m_unk2 = v48;
 		}
 
-		void operator =(T val)
+		void operator=(T val)
 		{
 			setData(val);
 		}

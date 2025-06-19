@@ -121,12 +121,17 @@ namespace YimMenu
 		ENTITY_ASSERT_VALID();
 
 		// TODO: maybe use a class member?
-		auto r1  = PED::GET_RELATIONSHIP_BETWEEN_PEDS(GetHandle(), PLAYER::PLAYER_PED_ID());
-		auto r2  = PED::GET_RELATIONSHIP_BETWEEN_PEDS(PLAYER::PLAYER_PED_ID(), GetHandle());
-		auto r3  = PED::IS_PED_IN_COMBAT(GetHandle(), PLAYER::PLAYER_PED_ID()) ? 5 : 0;
-		auto rel = std::max({r1, r2, r3});
+		auto r1 = PED::GET_RELATIONSHIP_BETWEEN_PEDS(GetHandle(), PLAYER::PLAYER_PED_ID());
+		auto r2 = PED::GET_RELATIONSHIP_BETWEEN_PEDS(PLAYER::PLAYER_PED_ID(), GetHandle());
+		auto r3 = PED::IS_PED_IN_COMBAT(GetHandle(), PLAYER::PLAYER_PED_ID()) ? 5 : 0;
 
-		return rel == 3 || rel == 4 || rel == 5;
+		if (r1 == 3 || r2 == 3)
+			return true;
+		if (r1 == 4 || r2 == 4)
+			return true;
+		if (r1 == 5 || r2 == 5 || r3 == 5)
+			return true;
+		return false;
 	}
 
 	int Ped::GetAccuracy()
@@ -184,14 +189,14 @@ namespace YimMenu
 	void Ped::GiveWeapon(std::uint32_t hash, bool equip)
 	{
 		ENTITY_ASSERT_VALID();
-		
+
 		WEAPON::GIVE_WEAPON_TO_PED(GetHandle(), hash, 9999, false, equip);
 	}
 
 	void Ped::RemoveWeapon(std::uint32_t hash)
 	{
 		ENTITY_ASSERT_VALID();
-		
+
 		WEAPON::REMOVE_WEAPON_FROM_PED(GetHandle(), hash);
 	}
 
