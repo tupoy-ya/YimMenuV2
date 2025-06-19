@@ -386,10 +386,10 @@ namespace YimMenu
 			GameDataHash = ptr.Add(3).Rip().As<CGameDataHash*>();
 		});
 
-		constexpr auto getDLCHashPtrn = Pattern<"3B 84 24 FC 01 00 00">("GetDLCHash&DLCManager");
+		constexpr auto getDLCHashPtrn = Pattern<"31 D2 E8 ? ? ? ? 3B 84">("GetDLCHash&DLCManager");
 		scanner.Add(getDLCHashPtrn, [this](PointerCalculator ptr) {
-			DLCManager = ptr.Sub(13).Rip().As<void**>();
-			GetDLCHash = ptr.Sub(4).Rip().As<PVOID>();
+			DLCManager = ptr.Sub(4).Rip().As<void**>();
+			GetDLCHash = ptr.Add(3).Rip().As<PVOID>();
 		});
 
 		constexpr auto assistedAimShouldReleaseEntityPtrn = Pattern<"80 7F 28 04 75 6A">("AssistedAimShouldReleaseEntity");
