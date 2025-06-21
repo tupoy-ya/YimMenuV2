@@ -5,6 +5,7 @@
 #include "core/commands/LoopedCommand.hpp"
 #include "game/backend/Self.hpp"
 #include "game/frontend/items/Items.hpp"
+#include "game/frontend/items/DrawHotkey.hpp"
 
 namespace YimMenu::Submenus
 {
@@ -33,62 +34,7 @@ namespace YimMenu::Submenus
 
 		for (auto& [name, link] : sortedCommands)
 		{
-			ImGui::PushID(link);
-
-			ImGui::Button(name.data());
-
-			bool active = ImGui::IsItemActive();
-
-			if (active)
-			{
-				HotkeySystem::SetBeingModifed(true);
-				g_HotkeySystem.CreateHotkey(link->m_Chain);
-			}
-
-			ImGui::SameLine(250);
-			ImGui::BeginGroup();
-
-			if (link->m_Chain.empty())
-			{
-				if (active)
-					ImGui::Text("Press any button...");
-				else
-					ImGui::Text("No hotkey assigned");
-			}
-			else
-			{
-				ImGui::PushItemWidth(35);
-				int i = 0;
-				for (auto key : link->m_Chain)
-				{
-					char key_label[32];
-					strcpy(key_label, g_HotkeySystem.GetHotkeyLabel(key).data());
-
-					ImGui::PushID(i);
-					ImGui::InputText("##keylabel", key_label, 32, ImGuiInputTextFlags_ReadOnly);
-					if (ImGui::IsItemClicked())
-						std::erase_if(link->m_Chain, [key](int j) {
-							return j == key;
-						});
-					ImGui::PopID();
-
-					i++;
-					ImGui::SameLine();
-				}
-				ImGui::PopItemWidth();
-
-				ImGui::SameLine();
-				if (ImGui::Button("Clear"))
-				{
-					link->m_Chain.clear();
-				}
-			}
-
-			ImGui::EndGroup();
-
-			ImGui::Spacing();
-
-			ImGui::PopID();
+			DrawHotkey(link, name);
 		}
 	};
 
@@ -98,6 +44,9 @@ namespace YimMenu::Submenus
 	{
 		auto hotkeys = std::make_shared<Category>("Hotkeys");
 		auto gui = std::make_shared<Category>("GUI");
+		auto game = std::make_shared<Category>("Game");
+
+		auto uiStyle = std::make_shared<Group>("UI");
 		auto playerEsp = std::make_shared<Group>("Player ESP", 10);
 		auto pedEsp = std::make_shared<Group>("Ped ESP", 10);
 		auto objectEsp = std::make_shared<Group>("Object ESP");
@@ -107,6 +56,8 @@ namespace YimMenu::Submenus
 		hotkeys->AddItem(std::make_shared<ImGuiItem>(Hotkeys));
 
 		// Players
+		uiStyle->AddItem(std::make_shared<ListCommandItem>("styleselector"_J));
+
 		playerEsp->AddItem(std::make_shared<BoolCommandItem>("espdrawplayers"_J));
 		playerEsp->AddItem(std::make_shared<ConditionalItem>("espdrawplayers"_J, std::make_shared<BoolCommandItem>("espdrawdeadplayers"_J)));
 
@@ -146,13 +97,16 @@ namespace YimMenu::Submenus
 
 		chat->AddItem(std::make_shared<BoolCommandItem>("clearchat"_J));
 
-		gui->AddItem(playerEsp);
-		gui->AddItem(pedEsp);
-		gui->AddItem(objectEsp);
+		game->AddItem(playerEsp);
+		game->AddItem(pedEsp);
+		game->AddItem(objectEsp);
+
+		gui->AddItem(uiStyle);
 		gui->AddItem(overlay);
 		gui->AddItem(chat);
 
 		AddCategory(std::move(hotkeys));
 		AddCategory(std::move(gui));
+		AddCategory(std::move(game));
 	}
 }
