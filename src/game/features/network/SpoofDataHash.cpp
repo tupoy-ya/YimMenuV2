@@ -20,12 +20,15 @@ namespace YimMenu::Features
 			           *Pointers.DLCManager,
 			           0)
 			    << "\n";
+
 			if (auto hashes = Pointers.GameDataHash)
 			{
 				log << "validHashes = {" << "\n";
 				for (int i = 0; i < hashes->m_Data.size(); i++)
 					log << hashes->m_Data[i].getData() << ", // " << i << "\n";
 				log << "};";
+
+				log << " GameSkeletonHash: " << hashes->m_GameSkeletonHash.getData();
 			}
 		}
 	};

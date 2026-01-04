@@ -4,47 +4,84 @@
 
 namespace rage
 {
-	template<typename T>
-	class ObfVar
+	class Obf32
 	{
 	private:
-		T m_unk1;
-		T m_unk2;
-		T m_unk3;
-		T m_unk4;
+		uint32_t m_unk1[2];
+		uint32_t m_unk3;
+		uint32_t m_unk4;
 
 	public:
-		T getData()
+		uint32_t getData()
 		{
 			auto v105 = m_unk4;
-			auto v28 = m_unk1 & v105;
-			auto v94 = m_unk2 & ~v105;
+			auto v28 = m_unk1[0] & v105;
+			auto v94 = m_unk1[1] & ~v105;
 			return v28 | v94;
 		}
 
-		operator T()
+		operator uint32_t()
 		{
 			return getData();
 		}
 
-		void setData(T val)
+		void setData(uint32_t val)
 		{
 			auto seed = time(nullptr);
 			m_unk3 = seed;
 			seed = time(nullptr);
 			m_unk4 = seed;
 
-			auto v48 = val & ~seed;
-			m_unk1 = seed & val;
-			m_unk2 = v48;
+			m_unk1[0] = val & seed;
+			m_unk1[1] = val & ~seed;
 		}
 
-		void operator=(T val)
+		void operator=(uint32_t val)
 		{
 			setData(val);
 		}
 	};
 
-	using Obf16 = ObfVar<unsigned short>;
-	using Obf32 = ObfVar<unsigned int>;
+	class Obf64
+	{
+	private:
+		uint32_t m_unk1[4];
+		uint32_t m_unk3;
+		uint32_t m_unk4;
+
+	public:
+		uint64_t getData()
+		{
+			uint32_t lower_bits = m_unk1[2] & ~m_unk4 | m_unk1[0] & m_unk4;
+			uint64_t upper_bits = m_unk1[3] & ~m_unk4 | m_unk1[1] & m_unk4;
+
+			return lower_bits | (upper_bits << 32);
+		}
+
+		operator uint64_t()
+		{
+			return getData();
+		}
+
+		void setData(uint64_t val)
+		{
+			uint32_t lower_bits = (uint32_t)val;
+			uint32_t upper_bits = (uint32_t)(val >> 32);
+
+			auto seed = time(nullptr);
+			m_unk3 = seed;
+			seed = time(nullptr);
+			m_unk4 = seed;
+
+			m_unk1[0] = lower_bits & seed;
+			m_unk1[1] = upper_bits & seed;
+			m_unk1[2] = lower_bits & ~seed;
+			m_unk1[3] = upper_bits & ~seed;
+		}
+
+		void operator=(uint32_t val)
+		{
+			setData(val);
+		}
+	};
 }
