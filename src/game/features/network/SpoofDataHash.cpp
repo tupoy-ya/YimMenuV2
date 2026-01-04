@@ -40,9 +40,11 @@ namespace YimMenu::Features
 		using BoolCommand::BoolCommand;
 
 		std::array<std::uint32_t, 16> origHashes;
+		bool was_enabled = false;
 
 		virtual void OnEnable() override
 		{
+			LOG(VERBOSE) << "OnEnable";
 			NativeHooks::AddHook(NativeHooks::ALL_SCRIPTS, NativeIndex::GET_EVER_HAD_BAD_PACK_ORDER, &PackOrderHook);
 
 			constexpr std::array<std::uint32_t, 16> validHashes = {
@@ -71,10 +73,16 @@ namespace YimMenu::Features
 				for (int i = 0; i < validHashes.size(); i++)
 					hashes->m_Data[i] = validHashes[i];
 			}
+
+			was_enabled = true;
 		}
 
 		virtual void OnDisable() override
 		{
+			LOG(VERBOSE) << "OnDisable called";
+			if (!was_enabled)
+				return;
+
 			if (auto hashes = Pointers.GameDataHash)
 			{
 				for (int i = 0; i < origHashes.size(); i++)
