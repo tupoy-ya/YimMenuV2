@@ -103,6 +103,7 @@ namespace YimMenu::Hooks
 {
 	uint32_t Network::GetDLCHash(void* manager, uint32_t seed)
 	{
+		LOG(VERBOSE) << "GetDLCHash manager: " << manager << " seed: " << seed;
 		if (YimMenu::Features::_SpoofDataHash.GetState())
 			return 2784221708;
 
